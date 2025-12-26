@@ -1,0 +1,19 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv/
+
+# Cache
+.cache/
+
+# Generated data
+data/*.jsonl
+
+# Modal credentials
+.modal.toml

@@ -1,0 +1,48 @@
+# Axolotl config for fine-tuning Qwen 2.5-0.5B on Ray documentation
+
+base_model: Qwen/Qwen2.5-0.5B-Instruct
+
+# Data
+datasets:
+  - path: data/ray_dataset_small.jsonl
+    type: chat_template
+    chat_template: chatml
+    field_messages: messages
+
+# LoRA configuration
+adapter: lora
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+lora_target_linear: true
+
+# Training parameters
+learning_rate: 2e-4
+lr_scheduler: cosine
+num_epochs: 3
+micro_batch_size: 8
+gradient_accumulation_steps: 4  # effective batch size = 32
+
+# Sequence length
+sequence_len: 4096
+
+# Optimizer
+optimizer: adamw_torch
+weight_decay: 0.01
+
+# Precision
+bf16: auto
+tf32: true
+
+# Logging and saving
+logging_steps: 10
+save_steps: 100
+eval_steps: 100
+
+# Output
+output_dir: ./outputs/qwen-ray-lora
+
+# Misc
+gradient_checkpointing: true
+flash_attention: true
+warmup_ratio: 0.1
