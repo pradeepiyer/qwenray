@@ -23,7 +23,7 @@ DATA_PATH = "/data/ray_dataset_small.jsonl"
 
 @app.function(
     image=axolotl_image,
-    gpu="A10G",
+    gpu="T4",
     timeout=3600,  # 1 hour
     volumes={VOLUME_PATH: volume},
 )

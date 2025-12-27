@@ -11,15 +11,15 @@ datasets:
 
 # LoRA configuration
 adapter: lora
-lora_r: 16
-lora_alpha: 32
-lora_dropout: 0.05
+lora_r: 32
+lora_alpha: 64
+lora_dropout: 0.1
 lora_target_linear: true
 
 # Training parameters
-learning_rate: 2e-4
+learning_rate: 5e-5
 lr_scheduler: cosine
-num_epochs: 3
+num_epochs: 10
 micro_batch_size: 8
 gradient_accumulation_steps: 4  # effective batch size = 32
 
@@ -28,7 +28,7 @@ sequence_len: 4096
 
 # Optimizer
 optimizer: adamw_torch
-weight_decay: 0.01
+weight_decay: 0.05
 
 # Precision
 bf16: auto
