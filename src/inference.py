@@ -24,7 +24,7 @@ vllm_image = (
 
 @app.cls(
     image=vllm_image,
-    gpu="A10G",
+    gpu="T4",
     timeout=600,
     volumes={"/outputs": volume},
 )
