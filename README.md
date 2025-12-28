@@ -25,7 +25,6 @@ uv run python src/data_prep.py --samples 500
 ```
 
 Uses OpenAI to generate Q&A pairs from Ray documentation.
-Output: `data/ray_dataset_small.jsonl`
 
 ### 2. Train on Modal
 
@@ -33,9 +32,8 @@ Output: `data/ray_dataset_small.jsonl`
 uv run modal run src/train.py
 ```
 
-- Runs on Modal A10G GPU
-- Uses Axolotl with LoRA (r=16, alpha=32)
-- ~90 seconds for 500 samples, 3 epochs
+- Runs on Modal T4 GPU
+- Uses Axolotl with LoRA
 - Model saved to Modal volume: `qwenray-outputs`
 
 ### 3. Run Inference
