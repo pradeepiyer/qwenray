@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
-"""Modal inference endpoint for the fine-tuned Qwen Ray model."""
+"""Modal inference endpoint for the fine-tuned Qwen Anyscale model."""
 
 import modal
 
-app = modal.App("qwenray-inference")
-volume = modal.Volume.from_name("qwenray-outputs", create_if_missing=False)
+app = modal.App("qwen-anyscale-inference")
+volume = modal.Volume.from_name("qwen-anyscale-outputs", create_if_missing=False)
 
-MODEL_PATH = "/outputs/qwen-ray-lora"
+MODEL_PATH = "/outputs/qwen-anyscale-lora"
 BASE_MODEL = "Qwen/Qwen2.5-0.5B-Instruct"
 
 # CUDA image with vLLM and PEFT
@@ -28,8 +28,8 @@ vllm_image = (
     timeout=600,
     volumes={"/outputs": volume},
 )
-class RayExpert:
-    """Qwen model fine-tuned on Ray documentation."""
+class AnyscaleExpert:
+    """Qwen model fine-tuned on Ray and Anyscale documentation."""
 
     @modal.enter()
     def load_model(self):
@@ -95,6 +95,6 @@ class RayExpert:
 def main(question: str = "How do I create a Ray actor?"):
     """Test the model with a question."""
     print(f"Question: {question}\n")
-    expert = RayExpert()
+    expert = AnyscaleExpert()
     response = expert.generate.remote(question)
     print(f"Response:\n{response}")

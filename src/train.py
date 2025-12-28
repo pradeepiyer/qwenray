@@ -1,29 +1,29 @@
 #!/usr/bin/env python3
-"""Modal training script for fine-tuning Qwen on Ray documentation."""
+"""Modal training script for fine-tuning Qwen on Ray and Anyscale documentation."""
 
 import modal
 
 # Modal app and volume
-app = modal.App("qwenray-train")
-volume = modal.Volume.from_name("qwenray-outputs", create_if_missing=True)
+app = modal.App("qwen-anyscale-train")
+volume = modal.Volume.from_name("qwen-anyscale-outputs", create_if_missing=True)
 
 # Docker image with Axolotl and local files
 axolotl_image = (
     modal.Image.from_registry("winglian/axolotl:main-latest", add_python="3.11")
     .pip_install("huggingface_hub[hf_transfer]")
     .env({"HF_HUB_ENABLE_HF_TRANSFER": "1"})
-    .add_local_file("config/qwen-ray.yaml", remote_path="/config/qwen-ray.yaml")
-    .add_local_file("data/ray_dataset_small.jsonl", remote_path="/data/ray_dataset_small.jsonl")
+    .add_local_file("config/qwen-anyscale.yaml", remote_path="/config/qwen-anyscale.yaml")
+    .add_local_file("data/test_dataset.jsonl", remote_path="/data/test_dataset.jsonl")
 )
 
 VOLUME_PATH = "/outputs"
-CONFIG_PATH = "/config/qwen-ray.yaml"
-DATA_PATH = "/data/ray_dataset_small.jsonl"
+CONFIG_PATH = "/config/qwen-anyscale.yaml"
+DATA_PATH = "/data/test_dataset.jsonl"
 
 
 @app.function(
     image=axolotl_image,
-    gpu="T4",
+    gpu="A10G",
     timeout=3600,  # 1 hour
     volumes={VOLUME_PATH: volume},
 )
@@ -39,7 +39,7 @@ def train():
 
     # Update paths for Modal environment
     config["datasets"][0]["path"] = DATA_PATH
-    config["output_dir"] = f"{VOLUME_PATH}/qwen-ray-lora"
+    config["output_dir"] = f"{VOLUME_PATH}/qwen-anyscale-lora"
 
     # Write modified config
     modified_config_path = "/tmp/config.yaml"
@@ -56,8 +56,8 @@ def train():
     # Commit volume to persist outputs
     volume.commit()
 
-    print(f"Training complete! Model saved to {VOLUME_PATH}/qwen-ray-lora")
-    return {"status": "success", "output_dir": f"{VOLUME_PATH}/qwen-ray-lora"}
+    print(f"Training complete! Model saved to {VOLUME_PATH}/qwen-anyscale-lora")
+    return {"status": "success", "output_dir": f"{VOLUME_PATH}/qwen-anyscale-lora"}
 
 
 @app.function(
