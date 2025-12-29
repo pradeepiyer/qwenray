@@ -9,21 +9,21 @@ volume = modal.Volume.from_name("qwen-anyscale-outputs", create_if_missing=False
 MODEL_PATH = "/outputs/qwen-anyscale-lora"
 BASE_MODEL = "Qwen/Qwen2.5-0.5B-Instruct"
 
-# CUDA image with vLLM and PEFT
-vllm_image = (
+# CUDA image with transformers and PEFT
+inference_image = (
     modal.Image.from_registry(
         "nvidia/cuda:12.4.0-devel-ubuntu22.04", add_python="3.11"
     )
-    .apt_install("git")
     .pip_install(
-        "vllm==0.6.6.post1",
+        "torch",
+        "transformers",
         "peft>=0.10.0",
     )
 )
 
 
 @app.cls(
-    image=vllm_image,
+    image=inference_image,
     gpu="T4",
     timeout=600,
     volumes={"/outputs": volume},
@@ -59,7 +59,7 @@ class AnyscaleExpert:
 
         # Format as ChatML
         messages = [
-            {"role": "system", "content": "You are an expert on Ray distributed computing."},
+            {"role": "system", "content": "You are an expert on Ray distributed computing and Anyscale Platform."},
             {"role": "user", "content": question},
         ]
 
