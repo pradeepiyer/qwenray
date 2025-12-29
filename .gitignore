@@ -12,8 +12,5 @@ wheels/
 # Cache
 .cache/
 
-# Generated data
-data/*.jsonl
-
 # Modal credentials
 .modal.toml

@@ -22,11 +22,7 @@ modal token new  # Authenticate with Modal
 ### 1. Generate Training Data
 
 ```bash
-uv run python src/data_prep.py \
-  --sources ray,anyscale \
-  --ray-samples 7000 \
-  --anyscale-samples 3000 \
-  --output data/ray_anyscale_10k.jsonl
+uv run python src/data_prep.py --sources ray,anyscale --ray-samples 50 --anyscale-samples 50 --output data/test_dataset.jsonl
 ```
 
 Uses OpenAI to generate Q&A pairs from Ray and Anyscale documentation.
